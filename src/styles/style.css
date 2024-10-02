@@ -1,0 +1,182 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+/* GLOBAL */
+.container {
+  max-width: 1200px; /* Increased for 4 columns */
+  margin: 0 auto;
+  padding: 32px 16px;
+  box-sizing: border-box;
+}
+
+.card {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+label {
+  display: block;
+}
+
+section > .title-section {
+  margin-block-end: 2rem;
+  font-size: 1.2em;
+}
+
+/* Header */
+header {
+  background-color: cornflowerblue;
+  color: beige;
+}
+
+.app-bar {
+  padding: 24px 20px;
+}
+
+.app-bar .brand-name {
+  margin: 0;
+  font-size: 1.7em;
+}
+
+/* Main Content */
+main {
+  min-height: 100vh;
+}
+
+.note-list-container {
+  margin-block-start: 32px;
+}
+
+/* Note List Grid Layout */
+.note-list .list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2%;
+}
+
+.note-list .list > * {
+  flex: 0 0 23.5%; /* Creates 4 columns with 2% gap */
+  margin-bottom: 2%;
+}
+
+.note-list .list .card .note-info {
+  padding: 16px;
+}
+
+.note-list .list .card .note-info__title h2 {
+  font-size: 1.1em;
+  margin-bottom: 8px;
+}
+
+.note-list .list .card .note-info__description p {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  font-size: 0.9em;
+}
+
+.note-list-container .placeholder {
+  margin-block: 1rem;
+  font-size: 1.5rem;
+  font-weight: lighter;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* Footer */
+footer {
+  background-color: cornflowerblue;
+  color: beige;
+}
+
+footer .container {
+  padding-block: 16px;
+}
+
+.main-footer {
+  padding: 8px 16px;
+  text-align: center;
+}
+
+/* Responsive Design */
+/* For larger tablets and small desktops */
+@media (max-width: 1024px) {
+  .container {
+    max-width: 960px;
+  }
+  
+  .note-list .list > * {
+    flex: 0 0 32%; /* 3 columns */
+  }
+}
+
+/* For tablets */
+@media (max-width: 768px) {
+  .container {
+    max-width: 720px;
+    padding-inline: 12px;
+  }
+
+  .note-list .list > * {
+    flex: 0 0 49%; /* 2 columns */
+  }
+
+  .app-bar {
+    padding: 16px 10px;
+  }
+
+  .app-bar .brand-name {
+    font-size: 1.5em;
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 480px) {
+  .container {
+    padding-inline: 8px;
+  }
+
+  .note-list .list > * {
+    flex: 0 0 100%; /* 1 column */
+  }
+
+  .app-bar {
+    padding: 12px 8px;
+  }
+
+  .app-bar .brand-name {
+    font-size: 1.2em;
+  }
+
+  .note-list .card .note-info {
+    padding: 12px;
+  }
+
+  .note-list .list .card .note-info__title h2 {
+    font-size: 1em;
+  }
+
+  .note-list .list .card .note-info__description p {
+    font-size: 0.9em;
+  }
+
+  footer .container {
+    padding-block: 12px;
+  }
+
+  .main-footer {
+    padding: 8px;
+    font-size: 0.9em;
+  }
+}
