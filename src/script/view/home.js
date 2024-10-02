@@ -5,11 +5,14 @@ const home = () => {
   const noteListContainerElement = document.querySelector('#noteListContainer');
   const noteListElement = noteListContainerElement.querySelector('.note-list');
   const listElement = noteListElement.querySelector('.list');
+  const modal = document.getElementById('addNoteModal');
+  const addNoteButton = document.getElementById('addNoteButton');
+  const closeButton = modal.querySelector('.close');
+  const addNoteForm = document.getElementById('addNoteForm');
 
   const showNote = () => {
     const result = Notes.getAll();
     displayResult(result);
-
     showNoteList();
   };
 
@@ -37,6 +40,40 @@ const home = () => {
       Utils.hideElement(element);
     });
     Utils.showElement(noteListElement);
+  };
+
+  // Modal functionality
+  addNoteButton.onclick = () => {
+    modal.style.display = 'block';
+  };
+
+  closeButton.onclick = () => {
+    modal.style.display = 'none';
+  };
+
+  window.onclick = (event) => {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  };
+
+  addNoteForm.onsubmit = (e) => {
+    e.preventDefault();
+    const titleInput = document.getElementById('noteTitle');
+    const bodyInput = document.getElementById('noteBody');
+
+    const newNote = {
+      id: `notes-${Date.now()}`,
+      title: titleInput.value,
+      body: bodyInput.value,
+      createdAt: new Date().toISOString(),
+      archived: false,
+    };
+
+    Notes.add(newNote);
+    modal.style.display = 'none';
+    addNoteForm.reset();
+    showNote();
   };
 
   showNote();
