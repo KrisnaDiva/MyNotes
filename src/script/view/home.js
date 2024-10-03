@@ -5,18 +5,19 @@ const home = () => {
   const noteListContainerElement = document.querySelector('#noteListContainer');
   const noteListElement = noteListContainerElement.querySelector('.note-list');
   const listElement = noteListElement.querySelector('.list');
-  const modal = document.getElementById('addNoteModal');
   const addNoteButton = document.getElementById('addNoteButton');
-  const closeButton = modal.querySelector('.close');
-  const addNoteForm = document.getElementById('addNoteForm');
-
-  const showNote = () => {
-    const result = Notes.getAll();
-    displayResult(result);
-    showNoteList();
-  };
+  const noteModal = document.querySelector('note-modal');
 
   const displayResult = (notes) => {
+    if (notes.length === 0) {
+      listElement.innerHTML = `
+        <div class="placeholder">
+          No notes available. Click "Add Note" to create one!
+        </div>
+      `;
+      return;
+    }
+
     const noteItems = notes.map((note) => {
       return `
         <div class="card">
@@ -36,47 +37,32 @@ const home = () => {
   };
 
   const showNoteList = () => {
-    Array.from(noteListContainerElement.children).forEach((element) => {
-      Utils.hideElement(element);
-    });
     Utils.showElement(noteListElement);
+    
+    const notes = Notes.getAll();
+    displayResult(notes);
   };
 
-  // Modal functionality
-  addNoteButton.onclick = () => {
-    modal.style.display = 'block';
-  };
+  addNoteButton.addEventListener('click', () => {
+    noteModal.open();
+  });
 
-  closeButton.onclick = () => {
-    modal.style.display = 'none';
-  };
-
-  window.onclick = (event) => {
-    if (event.target === modal) {
-      modal.style.display = 'none';
-    }
-  };
-
-  addNoteForm.onsubmit = (e) => {
-    e.preventDefault();
-    const titleInput = document.getElementById('noteTitle');
-    const bodyInput = document.getElementById('noteBody');
-
+  noteModal.addEventListener('note-submitted', (event) => {
+    const { title, body } = event.detail;
+    
     const newNote = {
       id: `notes-${Date.now()}`,
-      title: titleInput.value,
-      body: bodyInput.value,
+      title: title,
+      body: body,
       createdAt: new Date().toISOString(),
       archived: false,
     };
 
     Notes.add(newNote);
-    modal.style.display = 'none';
-    addNoteForm.reset();
-    showNote();
-  };
+    showNoteList(); 
+  });
 
-  showNote();
+  showNoteList();
 };
 
 export default home;

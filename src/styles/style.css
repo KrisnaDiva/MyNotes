@@ -6,14 +6,13 @@
 
 body {
   font-family: sans-serif;
+  min-height: 100vh;
 }
 
-/* GLOBAL */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 32px 16px;
-  box-sizing: border-box;
 }
 
 .card {
@@ -23,64 +22,34 @@ body {
   overflow: hidden;
 }
 
-label {
-  display: block;
-}
-
-section>.title-section {
-  margin-block-end: 2rem;
-  font-size: 1.2em;
-}
-
 .title-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-block-end: 2rem;
+  margin-bottom: 2rem;
   font-size: 1.2em;
 }
 
-/* Header */
-header {
-  background-color: cornflowerblue;
-  color: beige;
-}
-
-.app-bar {
-  padding: 24px 20px;
-}
-
-.app-bar .brand-name {
-  margin: 0;
-  font-size: 1.7em;
-}
-
-/* Main Content */
-main {
-  min-height: 100vh;
-}
-
 .note-list-container {
-  margin-block-start: 32px;
+  margin-top: 32px;
 }
 
-/* Note List Grid Layout */
 .note-list .list {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
 }
 
-.note-list .list .card .note-info {
+.note-list .card .note-info {
   padding: 16px;
 }
 
-.note-list .list .card .note-info__title h2 {
+.note-list .card .note-info__title h2 {
   font-size: 1.1em;
   margin-bottom: 8px;
 }
 
-.note-list .list .card .note-info__description p {
+.note-list .card .note-info__description p {
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -91,28 +60,12 @@ main {
 }
 
 .note-list-container .placeholder {
-  margin-block: 1rem;
+  margin: 1rem 0;
   font-size: 1.5rem;
   font-weight: lighter;
   color: rgba(0, 0, 0, 0.5);
 }
 
-/* Footer */
-footer {
-  background-color: cornflowerblue;
-  color: beige;
-}
-
-footer .container {
-  padding-block: 16px;
-}
-
-.main-footer {
-  padding: 8px 16px;
-  text-align: center;
-}
-
-/* Add Note Button */
 .add-note-btn {
   padding: 8px 16px;
   background-color: cornflowerblue;
@@ -127,77 +80,6 @@ footer .container {
   background-color: #4169e1;
 }
 
-/* Modal Styles */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-  background-color: white;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 500px;
-  border-radius: 8px;
-}
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.close:hover {
-  color: black;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin: 10px 0;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.form-group textarea {
-  height: 100px;
-  resize: vertical;
-}
-
-.submit-btn {
-  background-color: cornflowerblue;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.submit-btn:hover {
-  background-color: #4169e1;
-}
-
-/* Responsive Design */
-/* For larger tablets and small desktops */
 @media (max-width: 1024px) {
   .container {
     max-width: 960px;
@@ -208,7 +90,6 @@ footer .container {
   }
 }
 
-/* For tablets */
 @media (max-width: 768px) {
   .container {
     max-width: 720px;
@@ -218,22 +99,8 @@ footer .container {
   .note-list .list {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .app-bar {
-    padding: 16px 10px;
-  }
-
-  .app-bar .brand-name {
-    font-size: 1.5em;
-  }
-
-  .modal-content {
-    width: 90%;
-    margin: 20% auto;
-  }
 }
 
-/* For mobile devices */
 @media (max-width: 480px) {
   .container {
     padding-inline: 8px;
@@ -243,32 +110,15 @@ footer .container {
     grid-template-columns: 1fr;
   }
 
-  .app-bar {
-    padding: 12px 8px;
-  }
-
-  .app-bar .brand-name {
-    font-size: 1.2em;
-  }
-
   .note-list .card .note-info {
     padding: 12px;
   }
 
-  .note-list .list .card .note-info__title h2 {
+  .note-list .card .note-info__title h2 {
     font-size: 1em;
   }
 
-  .note-list .list .card .note-info__description p {
-    font-size: 0.9em;
-  }
-
-  footer .container {
-    padding-block: 12px;
-  }
-
-  .main-footer {
-    padding: 8px;
-    font-size: 0.9em;
+  .note-list .card .note-info__description p {
+    font-size: 0.8em;
   }
 }
