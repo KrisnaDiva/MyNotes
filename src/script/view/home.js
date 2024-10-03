@@ -38,7 +38,7 @@ const home = () => {
 
   const showNoteList = () => {
     Utils.showElement(noteListElement);
-    
+
     const notes = Notes.getAll();
     displayResult(notes);
   };
@@ -49,7 +49,7 @@ const home = () => {
 
   noteModal.addEventListener('note-submitted', (event) => {
     const { title, body } = event.detail;
-    
+
     const newNote = {
       id: `notes-${Date.now()}`,
       title: title,
@@ -59,7 +59,7 @@ const home = () => {
     };
 
     Notes.add(newNote);
-    showNoteList(); 
+    showNoteList();
   });
 
   showNoteList();
