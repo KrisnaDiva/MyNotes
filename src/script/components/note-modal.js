@@ -142,12 +142,10 @@ class NoteModal extends HTMLElement {
   }
 
   initializeEventListeners() {
-    const modal = this.shadowRoot.querySelector(".modal");
     const closeBtn = this.shadowRoot.querySelector(".close");
     const form = this.shadowRoot.querySelector("#addNoteForm");
     const titleInput = this.shadowRoot.querySelector("#noteTitle");
     const bodyInput = this.shadowRoot.querySelector("#noteBody");
-    const submitBtn = this.shadowRoot.querySelector(".submit-btn");
 
     closeBtn.onclick = () => this.close();
 
