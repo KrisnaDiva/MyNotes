@@ -1,36 +1,43 @@
-import { getNotes, createNote, deleteNote, archiveNote, unarchiveNote, getArchivedNotes } from '../services/api.js';
+import {
+  getNotes,
+  createNote,
+  deleteNote,
+  archiveNote,
+  unarchiveNote,
+  getArchivedNotes,
+} from "../services/api.js";
 
 const home = async () => {
-  const noteListContainerElement = document.querySelector('#noteListContainer');
-  const noteListElement = noteListContainerElement.querySelector('.note-list');
-  const listElement = noteListElement.querySelector('.list');
-  const addNoteButton = document.getElementById('addNoteButton');
-  const noteModal = document.querySelector('note-modal');
-  const noteFilter = document.getElementById('noteFilter');
+  const noteListContainerElement = document.querySelector("#noteListContainer");
+  const noteListElement = noteListContainerElement.querySelector(".note-list");
+  const listElement = noteListElement.querySelector(".list");
+  const addNoteButton = document.getElementById("addNoteButton");
+  const noteModal = document.querySelector("note-modal");
+  const noteFilter = document.getElementById("noteFilter");
 
-  const loadingIndicator = document.createElement('div');
-  loadingIndicator.className = 'loading-indicator';
+  const loadingIndicator = document.createElement("div");
+  loadingIndicator.className = "loading-indicator";
   loadingIndicator.innerHTML = '<div class="loading-spinner"></div>';
   document.body.appendChild(loadingIndicator);
 
-  const showLoading = () => loadingIndicator.classList.add('show');
-  const hideLoading = () => loadingIndicator.classList.remove('show');
+  const showLoading = () => loadingIndicator.classList.add("show");
+  const hideLoading = () => loadingIndicator.classList.remove("show");
 
   const showErrorMessage = (message) => {
     Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
+      icon: "error",
+      title: "Oops...",
       text: message,
-      confirmButtonColor: '#798645'
+      confirmButtonColor: "#798645",
     });
   };
 
   const showSuccessMessage = (message) => {
     Swal.fire({
-      icon: 'success',
-      title: 'Berhasil!',
+      icon: "success",
+      title: "Berhasil!",
       text: message,
-      confirmButtonColor: '#798645'
+      confirmButtonColor: "#798645",
     });
   };
 
@@ -43,12 +50,12 @@ const home = async () => {
       `;
       return;
     }
-  
+
     const noteItems = notes.map((note) => {
       const archiveButton = note.archived
         ? `<button class="unarchive-note-btn" data-id="${note.id}">Pulihkan</button>`
         : `<button class="archive-note-btn" data-id="${note.id}">Arsipkan</button>`;
-      
+
       return `
         <div class="card" id="note-${note.id}">
           <div class="note-info">
@@ -66,34 +73,39 @@ const home = async () => {
         </div>
       `;
     });
-  
-    listElement.innerHTML = noteItems.join('');
-  
-    const deleteButtons = listElement.querySelectorAll('.delete-note-btn');
-    deleteButtons.forEach(button => {
-      button.addEventListener('click', handleDeleteNote);
+
+    listElement.innerHTML = noteItems.join("");
+
+    const deleteButtons = listElement.querySelectorAll(".delete-note-btn");
+    deleteButtons.forEach((button) => {
+      button.addEventListener("click", handleDeleteNote);
     });
 
-    const archiveButtons = listElement.querySelectorAll('.archive-note-btn');
-    archiveButtons.forEach(button => {
-      button.addEventListener('click', handleArchiveNote);
+    const archiveButtons = listElement.querySelectorAll(".archive-note-btn");
+    archiveButtons.forEach((button) => {
+      button.addEventListener("click", handleArchiveNote);
     });
 
-    const unarchiveButtons = listElement.querySelectorAll('.unarchive-note-btn');
-    unarchiveButtons.forEach(button => {
-      button.addEventListener('click', handleUnarchiveNote);
+    const unarchiveButtons = listElement.querySelectorAll(
+      ".unarchive-note-btn",
+    );
+    unarchiveButtons.forEach((button) => {
+      button.addEventListener("click", handleUnarchiveNote);
     });
   };
 
   const showNoteList = async () => {
     showLoading();
     try {
-      const notes = noteFilter.value === 'active' ? await getNotes() : await getArchivedNotes();
+      const notes =
+        noteFilter.value === "active"
+          ? await getNotes()
+          : await getArchivedNotes();
       displayResult(notes);
     } catch (error) {
-      console.error('Failed to fetch notes:', error);
+      console.error("Failed to fetch notes:", error);
       listElement.innerHTML = `<div class="error">Gagal memuat catatan. Silakan coba lagi nanti.</div>`;
-      showErrorMessage('Gagal memuat catatan. Silakan coba lagi nanti.');
+      showErrorMessage("Gagal memuat catatan. Silakan coba lagi nanti.");
     } finally {
       hideLoading();
     }
@@ -105,10 +117,10 @@ const home = async () => {
     try {
       await deleteNote(noteId);
       await showNoteList();
-      showSuccessMessage('Catatan berhasil dihapus.');
+      showSuccessMessage("Catatan berhasil dihapus.");
     } catch (error) {
-      console.error('Failed to delete note:', error);
-      showErrorMessage('Gagal menghapus catatan. Silakan coba lagi.');
+      console.error("Failed to delete note:", error);
+      showErrorMessage("Gagal menghapus catatan. Silakan coba lagi.");
     } finally {
       hideLoading();
     }
@@ -120,10 +132,10 @@ const home = async () => {
     try {
       await archiveNote(noteId);
       await showNoteList();
-      showSuccessMessage('Catatan berhasil diarsipkan.');
+      showSuccessMessage("Catatan berhasil diarsipkan.");
     } catch (error) {
-      console.error('Failed to archive note:', error);
-      showErrorMessage('Gagal mengarsipkan catatan. Silakan coba lagi.');
+      console.error("Failed to archive note:", error);
+      showErrorMessage("Gagal mengarsipkan catatan. Silakan coba lagi.");
     } finally {
       hideLoading();
     }
@@ -135,20 +147,20 @@ const home = async () => {
     try {
       await unarchiveNote(noteId);
       await showNoteList();
-      showSuccessMessage('Catatan berhasil dipulihkan dari arsip.');
+      showSuccessMessage("Catatan berhasil dipulihkan dari arsip.");
     } catch (error) {
-      console.error('Failed to unarchive note:', error);
-      showErrorMessage('Gagal memulihkan catatan. Silakan coba lagi.');
+      console.error("Failed to unarchive note:", error);
+      showErrorMessage("Gagal memulihkan catatan. Silakan coba lagi.");
     } finally {
       hideLoading();
     }
   };
 
-  addNoteButton.addEventListener('click', () => {
+  addNoteButton.addEventListener("click", () => {
     noteModal.open();
   });
 
-  noteModal.addEventListener('note-submitted', async (event) => {
+  noteModal.addEventListener("note-submitted", async (event) => {
     const { title, body } = event.detail;
 
     const newNote = {
@@ -160,16 +172,16 @@ const home = async () => {
     try {
       await createNote(newNote);
       await showNoteList();
-      showSuccessMessage('Catatan baru berhasil ditambahkan.');
+      showSuccessMessage("Catatan baru berhasil ditambahkan.");
     } catch (error) {
-      console.error('Failed to create note:', error);
-      showErrorMessage('Gagal membuat catatan. Silakan coba lagi.');
+      console.error("Failed to create note:", error);
+      showErrorMessage("Gagal membuat catatan. Silakan coba lagi.");
     } finally {
       hideLoading();
     }
   });
 
-  noteFilter.addEventListener('change', showNoteList);
+  noteFilter.addEventListener("change", showNoteList);
 
   await showNoteList();
 };

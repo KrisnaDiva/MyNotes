@@ -1,11 +1,11 @@
 class Utils {
   static showElement(element) {
-    element.style.display = 'block';
+    element.style.display = "block";
     element.hidden = false;
   }
 
   static hideElement(element) {
-    element.style.display = 'none';
+    element.style.display = "none";
     element.hidden = true;
   }
 }

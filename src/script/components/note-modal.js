@@ -1,12 +1,12 @@
-import Utils from '../utils.js';
+import Utils from "../utils.js";
 class NoteModal extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-    }
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+  }
 
-    render() {
-        this.shadowRoot.innerHTML = `
+  render() {
+    this.shadowRoot.innerHTML = `
         <style>
           .modal {
             display: none;
@@ -134,85 +134,96 @@ class NoteModal extends HTMLElement {
           </div>
         </div>
       `;
-    }
+  }
 
-    connectedCallback() {
-        this.render();
-        this.initializeEventListeners();
-    }
+  connectedCallback() {
+    this.render();
+    this.initializeEventListeners();
+  }
 
-    initializeEventListeners() {
-        const modal = this.shadowRoot.querySelector('.modal');
-        const closeBtn = this.shadowRoot.querySelector('.close');
-        const form = this.shadowRoot.querySelector('#addNoteForm');
-        const titleInput = this.shadowRoot.querySelector('#noteTitle');
-        const bodyInput = this.shadowRoot.querySelector('#noteBody');
-        const submitBtn = this.shadowRoot.querySelector('.submit-btn');
+  initializeEventListeners() {
+    const modal = this.shadowRoot.querySelector(".modal");
+    const closeBtn = this.shadowRoot.querySelector(".close");
+    const form = this.shadowRoot.querySelector("#addNoteForm");
+    const titleInput = this.shadowRoot.querySelector("#noteTitle");
+    const bodyInput = this.shadowRoot.querySelector("#noteBody");
+    const submitBtn = this.shadowRoot.querySelector(".submit-btn");
 
-        closeBtn.onclick = () => this.close();
+    closeBtn.onclick = () => this.close();
 
-        form.onsubmit = (e) => {
-            e.preventDefault();
-            if (form.checkValidity()) {
-                const detail = {
-                    title: titleInput.value,
-                    body: bodyInput.value
-                };
-                this.dispatchEvent(new CustomEvent('note-submitted', { detail }));
-                this.close();
-                form.reset();
-            }
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      if (form.checkValidity()) {
+        const detail = {
+          title: titleInput.value,
+          body: bodyInput.value,
         };
-
-        titleInput.addEventListener('input', () => this.validateForm());
-        titleInput.addEventListener('blur', () => this.validateForm());
-        bodyInput.addEventListener('input', () => this.validateForm());
-        bodyInput.addEventListener('blur', () => this.validateForm());
-    }
-
-    validateForm() {
-        const titleInput = this.shadowRoot.querySelector('#noteTitle');
-        const bodyInput = this.shadowRoot.querySelector('#noteBody');
-        const submitBtn = this.shadowRoot.querySelector('.submit-btn');
-
-        this.validateInput(titleInput);
-        this.validateInput(bodyInput);
-
-        submitBtn.disabled = !titleInput.validity.valid || !bodyInput.validity.valid;
-    }
-
-    validateInput(input) {
-        const validationMessage = input.nextElementSibling;
-        input.setCustomValidity('');
-
-        if (input.validity.valueMissing) {
-            input.setCustomValidity('Field ini wajib diisi.');
-        } else if (input.validity.tooShort) {
-            input.setCustomValidity(`Panjang minimum adalah ${input.minLength} karakter.`);
-        } else if (input.validity.tooLong) {
-            input.setCustomValidity(`Panjang maksimum adalah ${input.maxLength} karakter.`);
-        } else if (input.validity.patternMismatch && input.id === 'noteTitle') {
-            input.setCustomValidity('Judul hanya boleh mengandung huruf, angka, dan spasi.');
-        }
-        validationMessage.textContent = input.validationMessage;
-        input.classList.toggle('invalid', !input.validity.valid);
-    }
-
-    open() {
-        const modal = this.shadowRoot.querySelector('.modal');
-        Utils.showElement(modal);
-        modal.style.display = 'flex';
-    }
-
-    close() {
-        const modal = this.shadowRoot.querySelector('.modal');
-        Utils.hideElement(modal);
-        const form = this.shadowRoot.querySelector('#addNoteForm');
+        this.dispatchEvent(new CustomEvent("note-submitted", { detail }));
+        this.close();
         form.reset();
-        this.shadowRoot.querySelectorAll('.validation-message').forEach(msg => msg.textContent = '');
-        this.shadowRoot.querySelectorAll('input, textarea').forEach(input => input.classList.remove('invalid'));
-        this.shadowRoot.querySelector('.submit-btn').disabled = true;
+      }
+    };
+
+    titleInput.addEventListener("input", () => this.validateForm());
+    titleInput.addEventListener("blur", () => this.validateForm());
+    bodyInput.addEventListener("input", () => this.validateForm());
+    bodyInput.addEventListener("blur", () => this.validateForm());
+  }
+
+  validateForm() {
+    const titleInput = this.shadowRoot.querySelector("#noteTitle");
+    const bodyInput = this.shadowRoot.querySelector("#noteBody");
+    const submitBtn = this.shadowRoot.querySelector(".submit-btn");
+
+    this.validateInput(titleInput);
+    this.validateInput(bodyInput);
+
+    submitBtn.disabled =
+      !titleInput.validity.valid || !bodyInput.validity.valid;
+  }
+
+  validateInput(input) {
+    const validationMessage = input.nextElementSibling;
+    input.setCustomValidity("");
+
+    if (input.validity.valueMissing) {
+      input.setCustomValidity("Field ini wajib diisi.");
+    } else if (input.validity.tooShort) {
+      input.setCustomValidity(
+        `Panjang minimum adalah ${input.minLength} karakter.`,
+      );
+    } else if (input.validity.tooLong) {
+      input.setCustomValidity(
+        `Panjang maksimum adalah ${input.maxLength} karakter.`,
+      );
+    } else if (input.validity.patternMismatch && input.id === "noteTitle") {
+      input.setCustomValidity(
+        "Judul hanya boleh mengandung huruf, angka, dan spasi.",
+      );
     }
+    validationMessage.textContent = input.validationMessage;
+    input.classList.toggle("invalid", !input.validity.valid);
+  }
+
+  open() {
+    const modal = this.shadowRoot.querySelector(".modal");
+    Utils.showElement(modal);
+    modal.style.display = "flex";
+  }
+
+  close() {
+    const modal = this.shadowRoot.querySelector(".modal");
+    Utils.hideElement(modal);
+    const form = this.shadowRoot.querySelector("#addNoteForm");
+    form.reset();
+    this.shadowRoot
+      .querySelectorAll(".validation-message")
+      .forEach((msg) => (msg.textContent = ""));
+    this.shadowRoot
+      .querySelectorAll("input, textarea")
+      .forEach((input) => input.classList.remove("invalid"));
+    this.shadowRoot.querySelector(".submit-btn").disabled = true;
+  }
 }
 
-customElements.define('note-modal', NoteModal);
+customElements.define("note-modal", NoteModal);

@@ -5,7 +5,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -136,7 +137,7 @@ footer {
 
 .archive-note-btn,
 .unarchive-note-btn {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   padding: 0 8px;
   margin-top: 4px;
 }
@@ -206,8 +207,12 @@ footer {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Media queries untuk responsivitas */
@@ -236,7 +241,8 @@ footer {
     width: 100%;
     justify-content: space-between;
   }
-  #noteFilter, .add-note-btn {
+  #noteFilter,
+  .add-note-btn {
     flex-grow: 1;
   }
 }
@@ -257,7 +263,8 @@ footer {
   .title-actions {
     flex-direction: column;
   }
-  #noteFilter, .add-note-btn {
+  #noteFilter,
+  .add-note-btn {
     width: 100%;
   }
   .delete-note-btn,

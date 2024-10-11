@@ -1,22 +1,22 @@
 class AppBar extends HTMLElement {
-    _shadowRoot = null;
-    _style = null;
+  _shadowRoot = null;
+  _style = null;
 
-    static get observedAttributes() {
-        return ['brand-name', 'background-color'];
-    }
+  static get observedAttributes() {
+    return ["brand-name", "background-color"];
+  }
 
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        this._shadowRoot = this.attachShadow({ mode: 'open' });
-        this._style = document.createElement('style');
-    }
+    this._shadowRoot = this.attachShadow({ mode: "open" });
+    this._style = document.createElement("style");
+  }
 
-    _updateStyle() {
-        const backgroundColor = this.getAttribute('background-color') || '#333333';
+  _updateStyle() {
+    const backgroundColor = this.getAttribute("background-color") || "#333333";
 
-        this._style.textContent = `
+    this._style.textContent = `
         :host {
           display: block;
           width: 100%;
@@ -38,33 +38,33 @@ class AppBar extends HTMLElement {
           font-size: 1.7em;
         }
       `;
-    }
+  }
 
-    _emptyContent() {
-        this._shadowRoot.innerHTML = '';
-    }
+  _emptyContent() {
+    this._shadowRoot.innerHTML = "";
+  }
 
-    connectedCallback() {
-        this.render();
-    }
+  connectedCallback() {
+    this.render();
+  }
 
-    attributeChangedCallback(name, oldValue, newValue) {
-        this.render();
-    }
+  attributeChangedCallback(name, oldValue, newValue) {
+    this.render();
+  }
 
-    render() {
-        this._emptyContent();
-        this._updateStyle();
+  render() {
+    this._emptyContent();
+    this._updateStyle();
 
-        const brandName = this.getAttribute('brand-name') || 'Note App';
+    const brandName = this.getAttribute("brand-name") || "Note App";
 
-        this._shadowRoot.appendChild(this._style);
-        this._shadowRoot.innerHTML += `
+    this._shadowRoot.appendChild(this._style);
+    this._shadowRoot.innerHTML += `
         <div>
           <h1 class="brand-name">${brandName}</h1>
         </div>
       `;
-    }
+  }
 }
 
-customElements.define('app-bar', AppBar);
+customElements.define("app-bar", AppBar);
