@@ -41,6 +41,29 @@ const home = async () => {
     });
   };
 
+  const animateCard = (card) => {
+    anime({
+      targets: card,
+      scale: [0.9, 1],
+      opacity: [0, 1],
+      duration: 500,
+      easing: "easeOutElastic(1, .8)",
+    });
+  };
+
+  const animateDelete = (card) => {
+    anime({
+      targets: card,
+      translateX: "100%",
+      opacity: 0,
+      duration: 500,
+      easing: "easeOutExpo",
+      complete: function (anim) {
+        card.remove();
+      },
+    });
+  };
+
   const displayResult = (notes) => {
     if (notes.length === 0) {
       listElement.innerHTML = `
@@ -75,6 +98,9 @@ const home = async () => {
     });
 
     listElement.innerHTML = noteItems.join("");
+
+    const cards = listElement.querySelectorAll(".card");
+    cards.forEach(animateCard);
 
     const deleteButtons = listElement.querySelectorAll(".delete-note-btn");
     deleteButtons.forEach((button) => {
@@ -113,10 +139,12 @@ const home = async () => {
 
   const handleDeleteNote = async (event) => {
     const noteId = event.target.dataset.id;
+    const card = document.getElementById(`note-${noteId}`);
+
     showLoading();
     try {
       await deleteNote(noteId);
-      await showNoteList();
+      animateDelete(card);
       showSuccessMessage("Catatan berhasil dihapus.");
     } catch (error) {
       console.error("Failed to delete note:", error);
@@ -157,6 +185,13 @@ const home = async () => {
   };
 
   addNoteButton.addEventListener("click", () => {
+    anime({
+      targets: addNoteButton,
+      scale: 1.2,
+      duration: 200,
+      direction: "alternate",
+      easing: "easeInOutQuad",
+    });
     noteModal.open();
   });
 
