@@ -1,4 +1,4 @@
-import { getNotes, createNote, deleteNote } from '../services/api.js';
+import { getNotes, createNote, deleteNote, getArchivedNotes, archiveNote, unarchiveNote } from '../services/api.js';
 
 const home = async () => {
   const noteListContainerElement = document.querySelector('#noteListContainer');
@@ -6,6 +6,7 @@ const home = async () => {
   const listElement = noteListElement.querySelector('.list');
   const addNoteButton = document.getElementById('addNoteButton');
   const noteModal = document.querySelector('note-modal');
+  const noteFilter = document.getElementById('noteFilter');
 
   const loadingIndicator = document.createElement('div');
   loadingIndicator.className = 'loading-indicator';
@@ -26,6 +27,10 @@ const home = async () => {
     }
   
     const noteItems = notes.map((note) => {
+      const archiveButton = note.archived
+        ? `<button class="unarchive-note-btn" data-id="${note.id}">Pulihkan</button>`
+        : `<button class="archive-note-btn" data-id="${note.id}">Arsipkan</button>`;
+      
       return `
         <div class="card" id="note-${note.id}">
           <div class="note-info">
@@ -37,6 +42,7 @@ const home = async () => {
             </div>
           </div>
           <div class="note-actions">
+            ${archiveButton}
             <button class="delete-note-btn" data-id="${note.id}">Hapus</button>
           </div>
         </div>
@@ -49,12 +55,50 @@ const home = async () => {
     deleteButtons.forEach(button => {
       button.addEventListener('click', handleDeleteNote);
     });
+
+    const archiveButtons = listElement.querySelectorAll('.archive-note-btn');
+    archiveButtons.forEach(button => {
+      button.addEventListener('click', handleArchiveNote);
+    });
+
+    const unarchiveButtons = listElement.querySelectorAll('.unarchive-note-btn');
+    unarchiveButtons.forEach(button => {
+      button.addEventListener('click', handleUnarchiveNote);
+    });
   };
 
-  const showNoteList = async () => {
+  const handleArchiveNote = async (event) => {
+    const noteId = event.target.dataset.id;
     showLoading();
     try {
-      const notes = await getNotes();
+      await archiveNote(noteId);
+      await showNoteList(noteFilter.value);
+    } catch (error) {
+      console.error('Failed to archive note:', error);
+      alert('Gagal mengarsipkan catatan. Silakan coba lagi.');
+    } finally {
+      hideLoading();
+    }
+  };
+
+  const handleUnarchiveNote = async (event) => {
+    const noteId = event.target.dataset.id;
+    showLoading();
+    try {
+      await unarchiveNote(noteId);
+      await showNoteList(noteFilter.value);
+    } catch (error) {
+      console.error('Failed to unarchive note:', error);
+      alert('Gagal memulihkan catatan. Silakan coba lagi.');
+    } finally {
+      hideLoading();
+    }
+  };
+
+  const showNoteList = async (type = 'active') => {
+    showLoading();
+    try {
+      const notes = type === 'active' ? await getNotes() : await getArchivedNotes();
       displayResult(notes);
     } catch (error) {
       console.error('Failed to fetch notes:', error);
@@ -64,12 +108,16 @@ const home = async () => {
     }
   };
 
+  noteFilter.addEventListener('change', (event) => {
+    showNoteList(event.target.value);
+  });
+
   const handleDeleteNote = async (event) => {
     const noteId = event.target.dataset.id;
     showLoading();
     try {
       await deleteNote(noteId);
-      await showNoteList(); // Refresh the list after deletion
+      await showNoteList(noteFilter.value);
     } catch (error) {
       console.error('Failed to delete note:', error);
       alert('Gagal menghapus catatan. Silakan coba lagi.');
@@ -93,7 +141,7 @@ const home = async () => {
     showLoading();
     try {
       await createNote(newNote);
-      await showNoteList();
+      await showNoteList(noteFilter.value);
     } catch (error) {
       console.error('Failed to create note:', error);
       alert('Gagal membuat catatan. Silakan coba lagi.');

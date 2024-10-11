@@ -1,18 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Note App</title>
-
-  <!-- Own Styles -->
   <link rel="icon" href="./src/public/favicon.png" sizes="512x512" />
-
-  <!-- Favicons -->
   <link rel="stylesheet" href="./src/styles/style.css" />
 </head>
-
 <body>
   <header>
     <app-bar brand-name="My Note App" background-color="#798645"></app-bar>
@@ -23,7 +17,13 @@
       <section id="note" class="note">
         <div class="title-section">
           <h2>Daftar Catatan</h2>
-          <button id="addNoteButton" class="add-note-btn">Tambah Catatan</button>
+          <div class="title-actions">
+            <select id="noteFilter">
+              <option value="active">Catatan Aktif</option>
+              <option value="archived">Catatan Diarsipkan</option>
+            </select>
+            <button id="addNoteButton" class="add-note-btn">Tambah Catatan</button>
+          </div>
         </div>
 
         <div id="noteListContainer" class="note-list-container">
@@ -43,5 +43,4 @@
 
   <script type="module" src="./src/app.js"></script>
 </body>
-
 </html>
