@@ -1,4 +1,4 @@
-import { getNotes, createNote, deleteNote, getArchivedNotes, archiveNote, unarchiveNote } from '../services/api.js';
+import { getNotes, createNote, deleteNote, archiveNote, unarchiveNote, getArchivedNotes } from '../services/api.js';
 
 const home = async () => {
   const noteListContainerElement = document.querySelector('#noteListContainer');
@@ -15,6 +15,24 @@ const home = async () => {
 
   const showLoading = () => loadingIndicator.classList.add('show');
   const hideLoading = () => loadingIndicator.classList.remove('show');
+
+  const showErrorMessage = (message) => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: message,
+      confirmButtonColor: '#798645'
+    });
+  };
+
+  const showSuccessMessage = (message) => {
+    Swal.fire({
+      icon: 'success',
+      title: 'Berhasil!',
+      text: message,
+      confirmButtonColor: '#798645'
+    });
+  };
 
   const displayResult = (notes) => {
     if (notes.length === 0) {
@@ -67,15 +85,45 @@ const home = async () => {
     });
   };
 
+  const showNoteList = async () => {
+    showLoading();
+    try {
+      const notes = noteFilter.value === 'active' ? await getNotes() : await getArchivedNotes();
+      displayResult(notes);
+    } catch (error) {
+      console.error('Failed to fetch notes:', error);
+      listElement.innerHTML = `<div class="error">Gagal memuat catatan. Silakan coba lagi nanti.</div>`;
+      showErrorMessage('Gagal memuat catatan. Silakan coba lagi nanti.');
+    } finally {
+      hideLoading();
+    }
+  };
+
+  const handleDeleteNote = async (event) => {
+    const noteId = event.target.dataset.id;
+    showLoading();
+    try {
+      await deleteNote(noteId);
+      await showNoteList();
+      showSuccessMessage('Catatan berhasil dihapus.');
+    } catch (error) {
+      console.error('Failed to delete note:', error);
+      showErrorMessage('Gagal menghapus catatan. Silakan coba lagi.');
+    } finally {
+      hideLoading();
+    }
+  };
+
   const handleArchiveNote = async (event) => {
     const noteId = event.target.dataset.id;
     showLoading();
     try {
       await archiveNote(noteId);
-      await showNoteList(noteFilter.value);
+      await showNoteList();
+      showSuccessMessage('Catatan berhasil diarsipkan.');
     } catch (error) {
       console.error('Failed to archive note:', error);
-      alert('Gagal mengarsipkan catatan. Silakan coba lagi.');
+      showErrorMessage('Gagal mengarsipkan catatan. Silakan coba lagi.');
     } finally {
       hideLoading();
     }
@@ -86,41 +134,11 @@ const home = async () => {
     showLoading();
     try {
       await unarchiveNote(noteId);
-      await showNoteList(noteFilter.value);
+      await showNoteList();
+      showSuccessMessage('Catatan berhasil dipulihkan dari arsip.');
     } catch (error) {
       console.error('Failed to unarchive note:', error);
-      alert('Gagal memulihkan catatan. Silakan coba lagi.');
-    } finally {
-      hideLoading();
-    }
-  };
-
-  const showNoteList = async (type = 'active') => {
-    showLoading();
-    try {
-      const notes = type === 'active' ? await getNotes() : await getArchivedNotes();
-      displayResult(notes);
-    } catch (error) {
-      console.error('Failed to fetch notes:', error);
-      listElement.innerHTML = `<div class="error">Gagal memuat catatan. Silakan coba lagi nanti.</div>`;
-    } finally {
-      hideLoading();
-    }
-  };
-
-  noteFilter.addEventListener('change', (event) => {
-    showNoteList(event.target.value);
-  });
-
-  const handleDeleteNote = async (event) => {
-    const noteId = event.target.dataset.id;
-    showLoading();
-    try {
-      await deleteNote(noteId);
-      await showNoteList(noteFilter.value);
-    } catch (error) {
-      console.error('Failed to delete note:', error);
-      alert('Gagal menghapus catatan. Silakan coba lagi.');
+      showErrorMessage('Gagal memulihkan catatan. Silakan coba lagi.');
     } finally {
       hideLoading();
     }
@@ -141,14 +159,17 @@ const home = async () => {
     showLoading();
     try {
       await createNote(newNote);
-      await showNoteList(noteFilter.value);
+      await showNoteList();
+      showSuccessMessage('Catatan baru berhasil ditambahkan.');
     } catch (error) {
       console.error('Failed to create note:', error);
-      alert('Gagal membuat catatan. Silakan coba lagi.');
+      showErrorMessage('Gagal membuat catatan. Silakan coba lagi.');
     } finally {
       hideLoading();
     }
   });
+
+  noteFilter.addEventListener('change', showNoteList);
 
   await showNoteList();
 };
