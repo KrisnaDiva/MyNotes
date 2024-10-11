@@ -7,6 +7,9 @@ import {
   getArchivedNotes,
 } from "../services/api.js";
 
+import Swal from "sweetalert2";
+import anime from "animejs";
+
 const home = async () => {
   const noteListContainerElement = document.querySelector("#noteListContainer");
   const noteListElement = noteListContainerElement.querySelector(".note-list");
